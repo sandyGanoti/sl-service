@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+					http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+					http://www.springframework.org/schema/context
+					http://www.springframework.org/schema/context/spring-context-4.1.xsd
+					http://www.springframework.org/schema/util 
+					http://www.springframework.org/schema/util/spring-util.xsd
+					http://www.springframework.org/schema/tx
+					http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+	
+	<!-- declare from where properties info, will be loaded -->
+<!-- 	<context:property-placeholder -->
+<!-- 		location="classpath:/WEB-INF/sl-service.properties" -->
+<!-- 		ignore-unresolvable="true" /> -->
+		
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:/WEB-INF/sl-service.properties</value>
+        </property>
+    </bean>
+    
+    	
+    
+    
+	<!-- declare all component packages -->
+	<context:annotation-config />
+	<context:spring-configured/>
+	<context:component-scan base-package="gr.di.uoa.sl.mvc.controller" />
+	<context:component-scan base-package="gr.di.uoa.sl.mvc.service" />
+	<context:component-scan base-package="gr.di.uoa.sl.mvc.dao" />
+	<context:component-scan base-package="gr.di.uoa.sl.soap" />
+	
+	<!-- dataSource for access to database - it uses a dbcp -->
+<!-- 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"> -->
+<!-- 		<property name="driverClassName" value="${jdbc.driver}" /> -->
+<!-- 		<property name="url" value="${db.url}" /> -->
+<!-- 		<property name="username" value="${db.passname}" /> -->
+<!-- 		<property name="password" value="${db.password}" /> -->
+<!-- 		<property name="initialSize" value="${dbcp.initialSize}" /> -->
+<!-- 	    <property name="maxActive" value="${dbcp.maxActive}" /> -->
+<!-- 	</bean> -->
+	
+<!-- 	<bean id="propertyConfigurer"  -->
+<!--           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> -->
+<!--         <property name="locations"> -->
+<!--             <list> -->
+<!--                 <value>classpath:jdbc.properties</value> -->
+<!--             </list> -->
+<!--         </property> -->
+<!--     </bean> -->
+	
+	
+	
+	<!-- dataSource for access to database - it uses a dbcp -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost/sl-service" />
+		<property name="username" value="postgres" />
+		<property name="password" value="d3murfi" />
+		<property name="initialSize" value="3" />
+	    <property name="maxActive" value="10" />
+	</bean>
+	
+	
+	<bean id="transactionManager" 
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+	
+	
+</beans>
